@@ -2,6 +2,7 @@ version: '2.1'
 services:
 
     unbound-mailcow:
+      container_name: mailcow_unbound
       image: mailcow/unbound:1.13
       environment:
         - TZ=${TZ}
@@ -17,6 +18,7 @@ services:
             - unbound
 
     mysql-mailcow:
+      container_name: mailcow_mysql
       image: mariadb:10.5
       depends_on:
         - unbound-mailcow
@@ -41,6 +43,7 @@ services:
             - mysql
 
     redis-mailcow:
+      container_name: mailcow_redis
       image: redis:5-alpine
       volumes:
         - redis-vol-1:/data/:Z
@@ -56,6 +59,7 @@ services:
             - redis
 
     clamd-mailcow:
+      container_name: mailcow_clamd
       image: mailcow/clamd:1.39
       restart: always
       dns:
@@ -71,6 +75,7 @@ services:
             - clamd
 
     rspamd-mailcow:
+      container_name: mailcow_rspamd
       image: mailcow/rspamd:1.76
       stop_grace_period: 30s
       depends_on:
@@ -101,6 +106,7 @@ services:
             - rspamd
 
     php-fpm-mailcow:
+      container_name: mailcow_php-fpm
       image: mailcow/phpfpm:1.73
       command: "php-fpm -d date.timezone=${TZ} -d expose_php=0"
       depends_on:
@@ -164,6 +170,7 @@ services:
             - phpfpm
 
     sogo-mailcow:
+      container_name: mailcow_sogo
       image: mailcow/sogo:1.96
       environment:
         - DBNAME=${DBNAME}
@@ -200,6 +207,7 @@ services:
             - sogo
 
     dovecot-mailcow:
+      container_name: mailcow_dovecot
       image: mailcow/dovecot:1.142
       depends_on:
         - mysql-mailcow
@@ -264,6 +272,7 @@ services:
             - dovecot
 
     postfix-mailcow:
+      container_name: mailcow_postfix
       image: mailcow/postfix:1.59
       depends_on:
         - mysql-mailcow
@@ -302,6 +311,7 @@ services:
             - postfix
 
     memcached-mailcow:
+      container_name: mailcow_memcached
       image: memcached:alpine
       restart: always
       environment:
@@ -312,6 +322,7 @@ services:
             - memcached
 
     nginx-mailcow:
+      container_name: mailcow_nginx
       depends_on:
         - sogo-mailcow
         - php-fpm-mailcow
@@ -372,6 +383,7 @@ services:
             - ${MAILCOW_HOSTNAME}
 
     acme-mailcow:
+      container_name: mailcow_acme
       depends_on:
         - nginx-mailcow
       image: mailcow/acme:1.78
@@ -409,6 +421,7 @@ services:
             - acme
 
     netfilter-mailcow:
+      container_name: mailcow_netfilter
       image: mailcow/netfilter:1.40
       stop_grace_period: 30s
       depends_on:
@@ -432,6 +445,7 @@ services:
         - /lib/modules:/lib/modules:ro
 
     watchdog-mailcow:
+      container_name: mailcow_watchdog
       image: mailcow/watchdog:1.91
       # Debug
       #command: /watchdog.sh
@@ -500,6 +514,7 @@ services:
             - watchdog
 
     dockerapi-mailcow:
+      container_name: mailcow_dockerapi
       image: mailcow/dockerapi:1.38
       security_opt:
         - label=disable
@@ -518,6 +533,7 @@ services:
             - dockerapi
 
     solr-mailcow:
+      container_name: mailcow_solr
       image: mailcow/solr:1.7
       restart: always
       volumes:
@@ -534,6 +550,7 @@ services:
             - solr
 
     olefy-mailcow:
+      container_name: mailcow_olefy
       image: mailcow/olefy:1.6
       restart: always
       environment:
@@ -552,6 +569,7 @@ services:
             - olefy
 
     ejabberd-mailcow:
+      container_name: mailcow_ejabberd
       image: mailcow/ejabberd:1.4
       volumes:
         - ./data/conf/ejabberd/ejabberd.yml:/home/ejabberd/conf/ejabberd.yml:z
@@ -590,6 +608,7 @@ services:
             - ejabberd
 
     ipv6nat-mailcow:
+      container_name: mailcow_ipv6nat
       depends_on:
         - unbound-mailcow
         - mysql-mailcow
