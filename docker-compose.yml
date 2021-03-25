@@ -12,7 +12,7 @@ services:
       restart: always
       tty: true
       networks:
-        mailcow-network:
+        network:
           ipv4_address: ${IPV4_NETWORK:-172.22.1}.254
           aliases:
             - unbound
@@ -38,7 +38,7 @@ services:
       ports:
         - "${SQL_PORT:-127.0.0.1:13306}:3306"
       networks:
-        mailcow-network:
+        network:
           aliases:
             - mysql
 
@@ -53,7 +53,7 @@ services:
       environment:
         - TZ=${TZ}
       networks:
-        mailcow-network:
+        network:
           ipv4_address: ${IPV4_NETWORK:-172.22.1}.249
           aliases:
             - redis
@@ -70,7 +70,7 @@ services:
       volumes:
         - ./data/conf/clamav/:/etc/clamav/:Z
       networks:
-        mailcow-network:
+        network:
           aliases:
             - clamd
 
@@ -101,7 +101,7 @@ services:
       dns:
         - ${IPV4_NETWORK:-172.22.1}.254
       networks:
-        mailcow-network:
+        network:
           aliases:
             - rspamd
 
@@ -165,7 +165,7 @@ services:
         - MASTER=${MASTER:-y}
       restart: always
       networks:
-        mailcow-network:
+        network:
           aliases:
             - phpfpm
 
@@ -201,7 +201,7 @@ services:
         - sogo-userdata-backup-vol:/sogo_backup:Z
       restart: always
       networks:
-        mailcow-network:
+        network:
           ipv4_address: ${IPV4_NETWORK:-172.22.1}.248
           aliases:
             - sogo
@@ -266,7 +266,7 @@ services:
           soft: 20000
           hard: 40000
       networks:
-        mailcow-network:
+        network:
           ipv4_address: ${IPV4_NETWORK:-172.22.1}.250
           aliases:
             - dovecot
@@ -306,7 +306,7 @@ services:
       dns:
         - ${IPV4_NETWORK:-172.22.1}.254
       networks:
-        mailcow-network:
+        network:
           aliases:
             - postfix
 
@@ -317,7 +317,7 @@ services:
       environment:
         - TZ=${TZ}
       networks:
-        mailcow-network:
+        network:
           aliases:
             - memcached
 
@@ -375,7 +375,7 @@ services:
         - "${HTTP_PORT}"
       restart: always
       networks:
-        mailcow-network:
+        network:
           aliases:
             - nginx
         nginx-proxy:
@@ -416,7 +416,7 @@ services:
         - mysql-socket-vol:/var/run/mysqld/:z
       restart: always
       networks:
-        mailcow-network:
+        network:
           aliases:
             - acme
 
@@ -509,7 +509,7 @@ services:
         - MAILQ_THRESHOLD=${MAILQ_THRESHOLD:-20}
         - MAILQ_CRIT=${MAILQ_CRIT:-30}
       networks:
-        mailcow-network:
+        network:
           aliases:
             - watchdog
 
@@ -528,7 +528,7 @@ services:
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock:ro
       networks:
-        mailcow-network:
+        network:
           aliases:
             - dockerapi
 
@@ -545,7 +545,7 @@ services:
         - SOLR_HEAP=${SOLR_HEAP:-1024}
         - SKIP_SOLR=${SKIP_SOLR:-y}
       networks:
-        mailcow-network:
+        network:
           aliases:
             - solr
 
@@ -564,7 +564,7 @@ services:
         - OLEFY_MINLENGTH=500
         - OLEFY_DEL_TMP=1
       networks:
-        mailcow-network:
+        network:
           aliases:
             - olefy
 
@@ -603,7 +603,7 @@ services:
         - "${XMPP_S2S_PORT:-5269}:5269"
         - "${XMPP_HTTPS_PORT:-5443}:5443"
       networks:
-        mailcow-network:
+        network:
           aliases:
             - ejabberd
 
@@ -641,7 +641,7 @@ services:
 networks:
   nginx-proxy:
     external: true
-  mailcow-network:
+  network:
     driver: bridge
     driver_opts:
       com.docker.network.bridge.name: br-mailcow
