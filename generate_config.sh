@@ -146,11 +146,14 @@ DBROOT=$(LC_ALL=C </dev/urandom tr -dc A-Za-z0-9 | head -c 28)
 # Example: HTTP_BIND=1.2.3.4
 # For IPv6 see https://mailcow.github.io/mailcow-dockerized-docs/firststeps-ip_bindings/
 
-HTTP_PORT=80
-HTTP_BIND=
+HTTP_PORT=8080
+HTTP_BIND=127.0.0.1
 
-HTTPS_PORT=443
-HTTPS_BIND=
+HTTPS_PORT=8443
+HTTPS_BIND=127.0.0.1
+
+NGINX_PROXY_CERTS=/opt/nginx-proxy/data/certs
+NGINX_PROXY_NET=nginx-proxy
 
 # ------------------------------
 # Other bindings
@@ -183,7 +186,7 @@ TZ=${MAILCOW_TZ}
 # Fixed project name
 # Please use lowercase letters only
 
-COMPOSE_PROJECT_NAME=mailcowdockerized
+COMPOSE_PROJECT_NAME=mailcow
 
 # Set this to "allow" to enable the anyone pseudo user. Disabled by default.
 # When enabled, ACL can be created, that apply to "All authenticated users"
@@ -226,7 +229,7 @@ ADDITIONAL_SERVER_NAMES=
 
 # Skip running ACME (acme-mailcow, Let's Encrypt certs) - y/n
 
-SKIP_LETS_ENCRYPT=n
+SKIP_LETS_ENCRYPT=y
 
 # Create seperate certificates for all domains - y/n
 # this will allow adding more than 100 domains, but some email clients will not be able to connect with alternative hostnames
