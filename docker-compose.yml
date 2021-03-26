@@ -579,9 +579,9 @@ services:
         - ./data/conf/ejabberd/autogen:/ejabberd/:z
         - mysql-socket-vol:/var/run/mysqld/:z
         # - ./data/assets/ssl:/etc/ssl/mail/:ro,z
-        - ${NGINX_PROXY_CERTS}/dhparam.pem:/etc/ssl/mail/dhparams.pem:ro 
-        - ${NGINX_PROXY_CERTS}/${MAILCOW_HOSTNAME}/fullchain.pem:/etc/ssl/mail/cert.pem:ro
-        - ${NGINX_PROXY_CERTS}/${MAILCOW_HOSTNAME}/key.pem:/etc/ssl/mail/key.pem:ro        
+        # - ${NGINX_PROXY_CERTS}/dhparam.pem:/ssl/mail/dhparams.pem:ro 
+        - ${NGINX_PROXY_CERTS}/${MAILCOW_HOSTNAME}/fullchain.pem:/ssl/cert.pem:ro
+        - ${NGINX_PROXY_CERTS}/${MAILCOW_HOSTNAME}/key.pem:/ssl/key.pem:ro        
 
       restart: always
       dns:
