@@ -153,6 +153,7 @@ HTTPS_PORT=8443
 HTTPS_BIND=127.0.0.1
 
 NGINX_PROXY_CERTS=/opt/nginx-proxy/data/certs
+NGINX_PROXY_DHPARAM=/opt/nginx-proxy/data/dhparam
 NGINX_PROXY_NET=nginx-proxy
 
 # ------------------------------

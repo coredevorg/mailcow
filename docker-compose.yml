@@ -219,7 +219,7 @@ services:
         - ./data/hooks/dovecot:/hooks:Z
         - ./data/conf/dovecot:/etc/dovecot:z
         # - ./data/assets/ssl:/etc/ssl/mail/:ro,z
-        - ${NGINX_PROXY_CERTS}/dhparam.pem:/etc/ssl/mail/dhparams.pem:ro 
+        - ${NGINX_PROXY_DHPARAM}/dhparam.pem:/etc/ssl/mail/dhparams.pem:ro 
         - ${NGINX_PROXY_CERTS}/${MAILCOW_HOSTNAME}/fullchain.pem:/etc/ssl/mail/cert.pem:ro
         - ${NGINX_PROXY_CERTS}/${MAILCOW_HOSTNAME}/key.pem:/etc/ssl/mail/key.pem:ro        
         - ./data/conf/sogo/:/etc/sogo/:z
@@ -239,7 +239,9 @@ services:
         - DBUSER=${DBUSER}
         - DBPASS=${DBPASS}
         - TZ=${TZ}
-        - MAILCOW_HOSTNAME=${MAILCOW_HOSTNAME}
+        - MAILCOW_HOSTNAME
+        - NGINX_PROXY_CERTS
+        - NGINX_PROXY_DHPARAM
         - MAILCOW_PASS_SCHEME=${MAILCOW_PASS_SCHEME:-BLF-CRYPT}
         - IPV4_NETWORK=${IPV4_NETWORK:-172.22.1}
         - ALLOW_ADMIN_EMAIL_LOGIN=${ALLOW_ADMIN_EMAIL_LOGIN:-n}
@@ -276,17 +278,6 @@ services:
       image: mailcow/postfix:1.59
       depends_on:
         - mysql-mailcow
-      volumes:
-        - ./data/hooks/postfix:/hooks:Z
-        - ./data/conf/postfix:/opt/postfix/conf:z
-        # - ./data/assets/ssl:/etc/ssl/mail/:ro,z
-        - ${NGINX_PROXY_CERTS}/dhparam.pem:/etc/ssl/mail/dhparams.pem:ro 
-        - ${NGINX_PROXY_CERTS}/${MAILCOW_HOSTNAME}/fullchain.pem:/etc/ssl/mail/cert.pem:ro
-        - ${NGINX_PROXY_CERTS}/${MAILCOW_HOSTNAME}/key.pem:/etc/ssl/mail/key.pem:ro        
-        - postfix-vol:/var/spool/postfix:z
-        - crypt-vol:/var/lib/zeyple:z
-        - rspamd-vol:/var/lib/rspamd:z
-        - mysql-socket-vol:/var/run/mysqld/:z
       environment:
         - LOG_LINES=${LOG_LINES:-9999}
         - TZ=${TZ}
@@ -295,7 +286,20 @@ services:
         - DBPASS=${DBPASS}
         - REDIS_SLAVEOF_IP=${REDIS_SLAVEOF_IP:-}
         - REDIS_SLAVEOF_PORT=${REDIS_SLAVEOF_PORT:-}
-        - MAILCOW_HOSTNAME=${MAILCOW_HOSTNAME}
+        - MAILCOW_HOSTNAME
+        - NGINX_PROXY_CERTS
+        - NGINX_PROXY_DHPARAM
+      volumes:
+        - ./data/hooks/postfix:/hooks:Z
+        - ./data/conf/postfix:/opt/postfix/conf:z
+        # - ./data/assets/ssl:/etc/ssl/mail/:ro,z
+        - ${NGINX_PROXY_DHPARAM}/dhparam.pem:/etc/ssl/mail/dhparams.pem:ro 
+        - ${NGINX_PROXY_CERTS}/${MAILCOW_HOSTNAME}/fullchain.pem:/etc/ssl/mail/cert.pem:ro
+        - ${NGINX_PROXY_CERTS}/${MAILCOW_HOSTNAME}/key.pem:/etc/ssl/mail/key.pem:ro        
+        - postfix-vol:/var/spool/postfix:z
+        - crypt-vol:/var/lib/zeyple:z
+        - rspamd-vol:/var/lib/rspamd:z
+        - mysql-socket-vol:/var/run/mysqld/:z
       cap_add:
         - NET_BIND_SERVICE
       ports:
@@ -347,7 +351,9 @@ services:
       environment:
         - HTTPS_PORT=${HTTPS_PORT:-443}
         - HTTP_PORT=${HTTP_PORT:-80}
-        - MAILCOW_HOSTNAME=${MAILCOW_HOSTNAME}
+        - MAILCOW_HOSTNAME
+        - NGINX_PROXY_CERTS
+        - NGINX_PROXY_DHPARAM
         - IPV4_NETWORK=${IPV4_NETWORK:-172.22.1}
         - TZ=${TZ}
         - SKIP_SOGO=${SKIP_SOGO:-n}
@@ -362,7 +368,7 @@ services:
         - ./data/web:/web:ro,z
         - ./data/conf/rspamd/dynmaps:/dynmaps:ro,z
         # - ./data/assets/ssl:/etc/ssl/mail/:ro,z
-        - ${NGINX_PROXY_CERTS}/dhparam.pem:/etc/ssl/mail/dhparams.pem:ro 
+        - ${NGINX_PROXY_DHPARAM}/dhparam.pem:/etc/ssl/mail/dhparams.pem:ro 
         - ${NGINX_PROXY_CERTS}/${MAILCOW_HOSTNAME}/fullchain.pem:/etc/ssl/mail/cert.pem:ro
         - ${NGINX_PROXY_CERTS}/${MAILCOW_HOSTNAME}/key.pem:/etc/ssl/mail/key.pem:ro        
         - ./data/conf/nginx/:/etc/nginx/conf.d/:z
@@ -458,7 +464,7 @@ services:
         - mysql-socket-vol:/var/run/mysqld/:z
         - postfix-vol:/var/spool/postfix:z
         # - ./data/assets/ssl:/etc/ssl/mail/:ro,z
-        - ${NGINX_PROXY_CERTS}/dhparam.pem:/etc/ssl/mail/dhparams.pem:ro 
+        - ${NGINX_PROXY_DHPARAM}/dhparam.pem:/etc/ssl/mail/dhparams.pem:ro 
         - ${NGINX_PROXY_CERTS}/${MAILCOW_HOSTNAME}/fullchain.pem:/etc/ssl/mail/cert.pem:ro
         - ${NGINX_PROXY_CERTS}/${MAILCOW_HOSTNAME}/key.pem:/etc/ssl/mail/key.pem:ro        
 
@@ -477,7 +483,9 @@ services:
         - WATCHDOG_SUBJECT=${WATCHDOG_SUBJECT:-Watchdog ALERT}
         - WATCHDOG_EXTERNAL_CHECKS=${WATCHDOG_EXTERNAL_CHECKS:-n}
         - WATCHDOG_MYSQL_REPLICATION_CHECKS=${WATCHDOG_MYSQL_REPLICATION_CHECKS:-n}
-        - MAILCOW_HOSTNAME=${MAILCOW_HOSTNAME}
+        - MAILCOW_HOSTNAME
+        - NGINX_PROXY_CERTS
+        - NGINX_PROXY_DHPARAM
         - COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME:-mailcow-dockerized}
         - IPV4_NETWORK=${IPV4_NETWORK:-172.22.1}
         - IP_BY_DOCKER_API=${IP_BY_DOCKER_API:-0}
@@ -579,7 +587,7 @@ services:
         - ./data/conf/ejabberd/autogen:/ejabberd/:z
         - mysql-socket-vol:/var/run/mysqld/:z
         # - ./data/assets/ssl:/etc/ssl/mail/:ro,z
-        # - ${NGINX_PROXY_CERTS}/dhparam.pem:/ssl/mail/dhparams.pem:ro 
+        # - ${NGINX_PROXY_DHPARAM}/dhparam.pem:/ssl/mail/dhparams.pem:ro 
         - ${NGINX_PROXY_CERTS}/${MAILCOW_HOSTNAME}/fullchain.pem:/ssl/cert.pem:ro
         - ${NGINX_PROXY_CERTS}/${MAILCOW_HOSTNAME}/key.pem:/ssl/key.pem:ro        
 
@@ -591,7 +599,9 @@ services:
         - "${MAILCOW_HOSTNAME}:127.0.0.1"
       environment:
         - TZ=${TZ}
-        - MAILCOW_HOSTNAME=${MAILCOW_HOSTNAME}
+        - MAILCOW_HOSTNAME
+        - NGINX_PROXY_CERTS
+        - NGINX_PROXY_DHPARAM
         - MASTER=${MASTER:-y}
         - IPV4_NETWORK=${IPV4_NETWORK:-172.22.1}
         - XMPP_HTTPS_PORT=${XMPP_HTTPS_PORT:-5443}
