@@ -59,4 +59,3 @@ refresh_images.sh
 update_diffs/
 data/assets/ssl-example/cert.pem
 data/assets/ssl-example/key.pem
-data/conf/postfix/main.cf
