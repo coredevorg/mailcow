@@ -2,7 +2,8 @@
 ./generate_config.sh
 source .env
 DOMAIN=${MAILCOW_HOSTNAME#*.}
-echo "AUTODISCOVER=autodicover.$DOMAIN,autoconfig.$DOMAIN" >> .env
+echo "AUTODISCOVER=autodiscover.$DOMAIN,autoconfig.$DOMAIN" >> .env
+echo "XMPP_HOSTNAME=im.$DOMAIN" >> .env
 $NGINX_PROXY_PATH/checkhost.sh $MAILCOW_HOSTNAME
 echo "login with [admin:moohoo] to continue configuration after startup!"
 echo -n "continue with startup? " && read dummy
