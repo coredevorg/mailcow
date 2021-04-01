@@ -4,7 +4,8 @@ source .env
 DOMAIN=${MAILCOW_HOSTNAME#*.}
 echo "AUTODISCOVER=autodiscover.$DOMAIN,autoconfig.$DOMAIN" >> .env
 echo "XMPP_HOSTNAME=im.$DOMAIN" >> .env
-$NGINX_PROXY_PATH/checkhost.sh $MAILCOW_HOSTNAME
+echo "XMPP_SUBDOMAINS=proxy.im.$DOMAIN,conference.im.$DOMAIN,pubsub.im.$DOMAIN,upload.im.$DOMAIN" >> .env
+echo "$NGINX_PROXY_PATH/checkhost.sh $MAILCOW_HOSTNAME
 echo "login with [admin:moohoo] to continue configuration after startup!"
 echo -n "continue with startup? " && read dummy
 docker-compose -f docker-compose.yml up -d --build
