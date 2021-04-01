@@ -1,6 +1,6 @@
 #!/bin/sh
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-export BACKUP_LOCATION=/root/mailcow
+export BACKUP_LOCATION=/root/.backup/mailcow
 mkdir -p $BACKUP_LOCATION
 cd /opt/mailcow
 date >$BACKUP_LOCATION/mailcow-backup.log 
