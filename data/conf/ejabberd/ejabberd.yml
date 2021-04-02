@@ -73,6 +73,7 @@ listen:
     module: ejabberd_http
     request_handlers:
       /api: mod_http_api
+      /xmpp: ejabberd_http_ws
   -
     port: 5282
     ip: "::"
